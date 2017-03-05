@@ -2067,6 +2067,16 @@ class EP_API {
 		//Add the API Header
 		$args['headers'] = $this->format_request_headers();
 
+		//Check if the host using basic authentication
+		//sample: https://username:password@sitename.com/
+		$match_url = array();
+		preg_match( '/(http|https):\/\/(.*):(.*)@(.*-?)/', $query['host'], $match_url );
+
+		if( ! empty( $match_url ) ){
+			$query['host'] = $match_url[ 1 ] . '://' . $match_url[ 4 ];
+			$args['headers']['Authorization'] = 'Basic ' . base64_encode( $match_url[ 2 ] . ':' . $match_url[ 3 ] );
+		}
+
 		$request = false;
 		$failures = 0;
 
