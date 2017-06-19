@@ -329,7 +329,7 @@ class EP_User_Index extends EP_Abstract_Object_Index {
 	private function get_mapping_file() {
 		$user_mapping_file = apply_filters(
 			'ep_config_user_mapping_file',
-			dirname( __FILE__ ) . '/../includes/user-mappings.php'
+			EP_PATH . '/includes/mappings/user.php'
 		);
 
 		return $user_mapping_file;

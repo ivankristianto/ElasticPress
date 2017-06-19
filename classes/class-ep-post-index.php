@@ -240,7 +240,21 @@ class EP_Post_Index extends EP_Abstract_Object_Index {
 	 * @return mixed|void
 	 */
 	private function get_mapping_file() {
-		return apply_filters( 'ep_config_mapping_file', dirname( __FILE__ ) . '/../includes/mappings.php' );
+		$es_version = ep_get_elasticsearch_version();
+
+		if ( empty( $es_version ) ) {
+			$es_version = apply_filters( 'ep_fallback_elasticsearch_version', '2.0' );
+		}
+
+		if ( ! $es_version || version_compare( $es_version, '5.0' ) < 0 ) {
+			$mapping_file = 'pre-5-0.php';
+		} else {
+			$mapping_file = '5-0.php';
+		}
+
+		$mapping = apply_filters( 'ep_config_mapping_file', dirname( __FILE__ ) . '/../includes/mappings/' . $mapping_file );
+
+		return $mapping;
 	}
 
 	/**
